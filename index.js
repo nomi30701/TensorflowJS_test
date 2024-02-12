@@ -1,3 +1,4 @@
+console.log('Hello Tensorflow!')
 // Define a model for linear regression. The script tag makes `tf` available
 // as a global variable.
 const model = tf.sequential();
@@ -16,3 +17,5 @@ function tensorflow_random_btn() {
         document.getElementById('tensorflow_test').textContent = `predict: ${result}`;
     });
 }
+
+
