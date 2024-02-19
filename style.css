@@ -1,25 +1,26 @@
 body{
-    font-size: 40px;
+    font-size: 35px;
     font-family: sans-serif;
+}
+body p,h3{
+    margin: 25px 0;
 }
 .container{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.container * {
-    margin: 20px 0;
-}
+
 .container button{
-    font-size: 50px;
-}
-#container_classifier{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    font-size: 35px;
+    margin-bottom: 20px;
 }
 
 .Info_container{
     font-size: 30px;
     font-family: sans-serif;
+    border: 2px solid;
+    border-radius: 10px;
+    padding: 0 15px;
+    background-color: rgb(241, 241, 241);
 }

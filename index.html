@@ -21,21 +21,23 @@
     <body>
         <div class="container">
             <h3>Test tensorflow is available</h3>
-            <button onclick="tensorflow_random_btn()">Click me!</button>
+            <button onclick="tensorflow_random_btn()">Predict</button>
             <p id="tensorflow_test">predict: </p>
         </div>
         <hr>
         
+        <!-- TODO: add random number and show for predict -->
         <div class="container">
             <h3>Train MNIST dataset</h3>
-            <button id="train_MNIST_btn">Click me!</button>
+            <button id="train_MNIST_btn">Train model</button>
+            <button id="show_panel_btn">Show/hide panel</button>
             <p id="model_state">State: none</p>
         </div>
         <hr>
         
-        <div id="container_classifier">
+        <div class="container" id="classifier">
             <div class="container">
-                <h3>mobilenet classifier</h3>
+                <h3>Mobilenet image classifier</h3>
                 <button onclick="load_mobilenet()">Load model</button>
                 <button id="classifier_btn" onclick="app()">Predict</button>
                 <div>
@@ -45,6 +47,9 @@
                 <p id="mobilenet_state">State: not load</p>
             </div>
         </div>
+        <!-- TODO: add camera -->
+
+        <!-- TODO: 增加 導入 python 模型 -->
         
 </body>
 </html>

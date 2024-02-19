@@ -3,7 +3,7 @@ import {MnistData} from './data.js';
 async function showExamples(data) {
     // Create a container in the visor
     const surface =
-    tfvis.visor().surface({ name: 'Input Data Examples', tab: 'Input Data'});
+    tfvis.visor().surface({ name: 'Input Data Examples', tab: 'Input Data'}); // create panel
 
     // Get the examples
     const examples = data.nextTestBatch(20);
@@ -167,7 +167,7 @@ async function showConfusion(model, data) {
 
 // 執行
 async function run() { // 異步函數
-    const data = new MnistData(); // data 為 class類
+    const data = new MnistData(); // data 為 MnistData class 類
     await data.load();            // 等待 load() 結束
     await showExamples(data);     // 等待 show Eaamples(data) 結束
 
@@ -184,14 +184,21 @@ async function run() { // 異步函數
 }
 
 const model_train_btn = document.getElementById('train_MNIST_btn')
+const show_panel_btn = document.getElementById('show_panel_btn')
 const model_state_text = document.getElementById('model_state');
 
+// if click train btn
 model_train_btn.onclick = async () => {
-    model_state_text.textContent = `State: Training...`;
+    model_state_text.textContent = `Training...`;
     model_state_text.style.color = 'red';
     model_train_btn.disabled = true;
     await run();
     model_train_btn.disabled = false;
-    model_state_text.textContent = `State: Done!`;
+    model_state_text.textContent = `Done!`;
     model_state_text.style.color = 'green';
 };
+
+// show MnistData panel btn
+show_panel_btn.onclick = Event => {
+    tfvis.visor().toggle();
+}

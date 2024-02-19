@@ -17,4 +17,3 @@ function tensorflow_random_btn() {
     });
 }
 
-

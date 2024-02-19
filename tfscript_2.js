@@ -1,6 +1,6 @@
 let net;
 const show_result = document.createElement('div');
-const container_classifier = document.getElementById('container_classifier');
+const classifier = document.getElementById('classifier');
 const classifier_btn = document.getElementById('classifier_btn');
 const mobilenet_state = document.getElementById('mobilenet_state');
 
@@ -10,19 +10,21 @@ async function load_mobilenet() {
     classifier_btn.disabled = true; // disable btn
     
     mobilenet_state.textContent = 'Loading mobilenet..';  // show state
+    mobilenet_state.style.color = 'red';
     net = await mobilenet.load(); 
     mobilenet_state.textContent = 'Successfully loaded model';  // show state
+    mobilenet_state.style.color = 'green';
     
     classifier_btn.disabled = false; // enable btn
 }
 
+// Predict btn
 async function app() {
     show_result.innerHTML = ''; // clean text
 
     // Make a prediction through the model on our image.
     const imgEl = document.getElementById('img');
     const result = await net.classify(imgEl);
-    console.log(result);
     
     // show to page
     result.forEach((obj, index) => {
@@ -30,11 +32,11 @@ async function app() {
         const probability = (obj.probability * 100).toFixed(2);
         const firstClassName = className.split(',')[0].trim();
         show_result.innerHTML += `
-        <p>className: ${firstClassName} | probability: ${probability}%</p>
+        <p>Class: <span style="color: blue">${firstClassName}</span> | Prob: <span style="color: red">${probability}%</span></p>
         `;
     });
     show_result.classList.add('Info_container');
-    container_classifier.appendChild(show_result);
+    classifier.appendChild(show_result);
 }
 
 // if import img file
