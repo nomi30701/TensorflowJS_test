@@ -18,10 +18,7 @@ body{
     flex-direction: row;
     justify-content: center;
 }
-#container_classifier *{
-    margin-left: 30px;
-    margin-bottom: 10px;
-}
+
 .Info_container{
     font-size: 30px;
     font-family: sans-serif;
