@@ -183,12 +183,15 @@ async function run() { // 異步函數
     await showConfusion(model, data);
 }
 
-// document.addEventListener('DOMContentLoaded', run); // DOM載入後 執行 run()
-document.getElementById('train_MNIST_btn').onclick = async () => {
-    const model_state_text = document.getElementById('model_state');
+const model_train_btn = document.getElementById('train_MNIST_btn')
+const model_state_text = document.getElementById('model_state');
+
+model_train_btn.onclick = async () => {
     model_state_text.textContent = `State: Training...`;
     model_state_text.style.color = 'red';
+    model_train_btn.disabled = true;
     await run();
+    model_train_btn.disabled = false;
     model_state_text.textContent = `State: Done!`;
     model_state_text.style.color = 'green';
 };

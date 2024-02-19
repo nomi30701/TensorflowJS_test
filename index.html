@@ -1,31 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Import TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-    <!-- Import tfjs-vis -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
-    <!-- Import the data file -->
-    <script src="data.js" type="module"></script>
-    <!-- Import the main script file -->
-    <script src="tfscript.js" type="module"></script>
-    <script src="index.js"></script>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <p>Test tensorflow is available</p>
-        <button onclick="tensorflow_random_btn()">Click me!</button>
-        <p id="tensorflow_test">predict: </p>
-    </div>
-
-    <div class="container">
-        <h3>Train MNIST dataset</h3>
-        <button id="train_MNIST_btn">Click me!</button>
-        <p id="model_state">State: none</p>
-    </div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <!-- Import TensorFlow.js -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+        <!-- Import tfjs-vis -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
+        <!-- import mobilenet from tf -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+        <!-- Import the data file -->
+        <script src="data.js" type="module" defer></script>
+        <!-- Import the main script file -->
+        <script src="tfscript.js" type="module" defer></script>
+        <script src="tfscript_2.js" defer></script>
+        <script src="index.js" defer></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <h3>Test tensorflow is available</h3>
+            <button onclick="tensorflow_random_btn()">Click me!</button>
+            <p id="tensorflow_test">predict: </p>
+        </div>
+        <hr>
+        
+        <div class="container">
+            <h3>Train MNIST dataset</h3>
+            <button id="train_MNIST_btn">Click me!</button>
+            <p id="model_state">State: none</p>
+        </div>
+        <hr>
+        
+        <div id="container_classifier">
+            <div class="container">
+                <h3>mobilenet classifier</h3>
+                <button onclick="load_mobilenet()">Load model</button>
+                <button id="classifier_btn" onclick="app()">Predict</button>
+                <div>
+                    <input type="file" id="file" accept="image/jpeg, image/png"><br>
+                    <img id="img" src="./JlUvsxa.jpg" width="227" height="227">
+                </div>
+                <p id="mobilenet_state">State: not load</p>
+            </div>
+        </div>
+        
 </body>
 </html>
