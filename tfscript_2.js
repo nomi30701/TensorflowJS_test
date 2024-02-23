@@ -32,20 +32,16 @@ async function app() {
             const probability = (obj.probability * 100).toFixed(2);
             const firstClassName = className.split(',')[0].trim();
             htmlContent += `
-            <p>Class: <span style="color: blue">${firstClassName}</span> | Prob: <span style="color: red">${probability}%</span></p>
+            <p>Class: <span style="color: blue">${firstClassName}</span>\n
+            Prob: <span style="color: red">${probability}%</span></p>
             `;
         });
         return htmlContent;
     }
 
     if (isCameraActive) {
-        const webcamConstraints = {
-            video: {
-                facingMode: 'environment' // Request the back camera
-            }
-        };
         const webcamElement = document.getElementById('webcam');
-        const webcam = await tf.data.webcam(webcamElement, webcamConstraints);
+        const webcam = await tf.data.webcam(webcamElement, {facingMode: 'environment'});
         
         while (isCameraActive) {
             const img = await webcam.capture();
