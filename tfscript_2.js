@@ -40,8 +40,9 @@ async function app() {
     }
 
     if (isCameraActive) {
+        await current_cameraId();
         const webcamElement = document.getElementById('webcam');
-        const webcam = await tf.data.webcam(webcamElement, {video: {facingMode: 'environment'}});
+        const webcam = await tf.data.webcam(webcamElement, { video: { deviceId: currentDeviceId } });
         
         while (isCameraActive) {
             const img = await webcam.capture();
@@ -61,7 +62,7 @@ async function app() {
 
 // media toggle
 var isCameraActive = false;
-function toggleCameraMode() {
+async function toggleCameraMode() {
     if (isCameraActive) {
         // If the camera is active, switch back to file input and image
         document.getElementById('media-container').innerHTML = `
@@ -74,24 +75,25 @@ function toggleCameraMode() {
             <video playsinline muted id="webcam" width="224" height="224"></video>
             <select id="camera-select"></select>
         `;
+        await updateCameraSelect();
         isCameraActive = true;
     }
 }
 
-// // update dropdown list  
-// var videoDevices = [];
-// async function updateCameraSelect() {
-//     const devices = await navigator.mediaDevices.enumerateDevices(); // get all input devices
-//     videoDevices = devices.filter(device => device.kind === 'videoinput'); // choose video devices
-//     const cameraSelect = document.getElementById('camera-select');
-//     cameraSelect.innerHTML = videoDevices.map((device, index) => `<option value="${index}">${device.label || `Camera ${index + 1}`}</option>`).join(''); // add to select
-// }
+// update dropdown list  
+var videoDevices = [];
+async function updateCameraSelect() {
+    const devices = await navigator.mediaDevices.enumerateDevices(); // get all input devices
+    videoDevices = devices.filter(device => device.kind === 'videoinput'); // choose video devices
+    const cameraSelect = document.getElementById('camera-select');
+    cameraSelect.innerHTML = videoDevices.map((device, index) => `<option value="${index}">${device.label || `Camera ${index + 1}`}</option>`).join(''); // add to select
+}
 
-// // get current cameraID
-// async function switchCamera() {
-//     const cameraSelect = document.getElementById('camera-select');
-//     currentDeviceId = videoDevices[cameraSelect.value].deviceId;
-// }
+// get current cameraID
+async function current_cameraId() {
+    const cameraSelect = document.getElementById('camera-select');
+    currentDeviceId = videoDevices[cameraSelect.value].deviceId;
+}
 
 // // Switch camera when the select value changes
 // document.getElementById('camera-select').addEventListener('change', async () => {
