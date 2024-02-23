@@ -41,13 +41,13 @@ async function app() {
 
     if (isCameraActive) {
         const webcamElement = document.getElementById('webcam');
-        const webcam = await tf.data.webcam(webcamElement, {facingMode: 'environment'});
+        const webcam = await tf.data.webcam(webcamElement, {faceMode:'environment'});
         
         while (isCameraActive) {
             const img = await webcam.capture();
             const result = await net.classify(img);
             show_result.innerHTML = generateHtmlContent(result);
-            img.dispose(); //  Release image memory
+            img.dispose(); // Dispose the tensor to release the memory.
             await tf.nextFrame(); // Wait for the next frame
         }
         webcam.stop(); // Stop the webcam when not in use
@@ -61,7 +61,7 @@ async function app() {
 
 // media toggle
 var isCameraActive = false;
-async function toggleCameraMode() {
+function toggleCameraMode() {
     if (isCameraActive) {
         // If the camera is active, switch back to file input and image
         document.getElementById('media-container').innerHTML = `
@@ -74,8 +74,6 @@ async function toggleCameraMode() {
             <video playsinline muted id="webcam" width="224" height="224"></video>
             <select id="camera-select"></select>
         `;
-        await updateCameraSelect();
-        await switchCamera();
         isCameraActive = true;
     }
 }
