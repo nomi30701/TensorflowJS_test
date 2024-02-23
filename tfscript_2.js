@@ -40,12 +40,20 @@ async function app() {
     }
 
     if (isCameraActive) {
-        await current_cameraId();
+        await current_cameraId(); // get current cameraID
         const webcamElement = document.getElementById('webcam');
-        const webcam = await tf.data.webcam(webcamElement, {deviceId: currentDeviceId});
-        mobilenet_state.textContent = currentDeviceId;
+        // const webcam = await tf.data.webcam(webcamElement, {deviceId: currentDeviceId});
+
+        // Use MediaDevices.getUserMedia API to access the webcam
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { deviceId: currentDeviceId, width: 227, height: 227 } 
+        });
+        webcamElement.srcObject = stream;
+        await webcamElement.play();
+
         while (isCameraActive) {
-            const img = await webcam.capture();
+            // const img = await webcam.capture();
+            const img = tf.browser.fromPixels(webcamElement);
             const result = await net.classify(img);
             show_result.innerHTML = generateHtmlContent(result);
             img.dispose(); // Dispose the tensor to release the memory.
@@ -79,7 +87,6 @@ async function toggleCameraMode() {
         isCameraActive = true;
     }
 }
-
 // update dropdown list  
 var videoDevices = [];
 async function updateCameraSelect() {
