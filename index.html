@@ -43,14 +43,12 @@
                 <button id="classifier_btn" onclick="app()" disabled="false">Predict</button>
                 <div id="media-container">
                     <img id="img" src="./JlUvsxa.jpg" width="227" height="227">
-                    <input type="file" id="file" accept="image/jpeg, image/png">
+                    <input type="file" id="file" capture="camera" accept="image/jpeg, image/png">
                 </div>
                 <button onclick="toggleCameraMode()">Toggle camera</button>
                 <p id="mobilenet_state">State: not load</p>
             </div>
         </div>
-
-        <!-- TODO: add camera -->
 
         <!-- TODO: 增加 導入 python 模型 -->
         

@@ -3,7 +3,7 @@ const show_result = document.createElement('div');
 const classifier = document.getElementById('classifier');
 const classifier_btn = document.getElementById('classifier_btn');
 const mobilenet_state = document.getElementById('mobilenet_state');
-
+const imgElement = document.getElementById('img');
 
 // Load model btn
 async function load_mobilenet() {    
@@ -12,7 +12,6 @@ async function load_mobilenet() {
     net = await mobilenet.load(); 
     mobilenet_state.textContent = 'Successfully loaded model';  // show state
     mobilenet_state.style.color = 'green';
-    
     classifier_btn.disabled = false; // enable btn
 }
 
@@ -39,10 +38,10 @@ async function app() {
         return htmlContent;
     }
 
+    // TODO: add capture photo
     if (isCameraActive) {
         await current_cameraId(); // get current cameraID
         const webcamElement = document.getElementById('webcam');
-        // const webcam = await tf.data.webcam(webcamElement, {deviceId: currentDeviceId});
 
         // Use MediaDevices.getUserMedia API to access the webcam
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -52,7 +51,6 @@ async function app() {
         await webcamElement.play();
 
         while (isCameraActive) {
-            // const img = await webcam.capture();
             const img = tf.browser.fromPixels(webcamElement);
             const result = await net.classify(img);
             show_result.innerHTML = generateHtmlContent(result);
@@ -75,12 +73,19 @@ async function toggleCameraMode() {
         // If the camera is active, switch back to file input and image
         document.getElementById('media-container').innerHTML = `
             <img id="img" src="./JlUvsxa.jpg" width="227" height="227">
-            <input type="file" id="file" accept="image/jpeg, image/png">
+            <input type="file" id="file" capture="camera" accept="image/jpeg, image/png">
         `;
         isCameraActive = false;
+
+        // Reattach the event listener to the file input element
+        document.getElementById('file').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            const url = URL.createObjectURL(file);
+            document.getElementById('img').src = url;
+        });
     } else {
         document.getElementById('media-container').innerHTML = `
-            <video playsinline muted id="webcam" width="224" height="224"></video>
+            <video autoplay playsinline muted id="webcam"></video>
             <select id="camera-select"></select>
         `;
         await updateCameraSelect();
@@ -102,14 +107,9 @@ async function current_cameraId() {
     currentDeviceId = videoDevices[cameraSelect.value].deviceId;
 }
 
-// // Switch camera when the select value changes
-// document.getElementById('camera-select').addEventListener('change', async () => {
-//     if (isCameraActive) {
-//         await switchCamera();
-//         // Stop the current webcam stream
-//         webcam.stop();
-//         mobilenet_state.textContent = currentDeviceId;
-//         // Start a new webcam stream with the new camera
-//         webcam = await tf.data.webcam(webcamElement, { video: { deviceId: currentDeviceId } });
-//     }
-// });
+// Add an event listener to the file input element
+document.getElementById('file').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    const url = URL.createObjectURL(file);
+    imgElement.src = url;
+});

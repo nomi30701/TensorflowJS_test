@@ -28,6 +28,4 @@ body p,h3{
 #media-container{
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin: 20px 0;
 }
