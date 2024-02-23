@@ -41,7 +41,7 @@ async function app() {
 
     if (isCameraActive) {
         const webcamElement = document.getElementById('webcam');
-        const webcam = await tf.data.webcam(webcamElement, {faceMode:'environment'});
+        const webcam = await tf.data.webcam(webcamElement, {video: {facingMode: 'environment'}});
         
         while (isCameraActive) {
             const img = await webcam.capture();
