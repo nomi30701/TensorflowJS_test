@@ -39,15 +39,13 @@ async function app() {
     }
 
     if (isCameraActive) {
-        // const webcamConstraints = {
-        //     video: {
-        //         deviceId: currentDeviceId
-        //     }
-        // };
-        await switchCamera(); // get current cameraID
-        mobilenet_state.textContent = currentDeviceId;
+        const webcamConstraints = {
+            video: {
+                facingMode: 'environment' // Request the back camera
+            }
+        };
         const webcamElement = document.getElementById('webcam');
-        const webcam = await tf.data.webcam(webcamElement, { video: { deviceId: currentDeviceId } });
+        const webcam = await tf.data.webcam(webcamElement, webcamConstraints);
         
         while (isCameraActive) {
             const img = await webcam.capture();
@@ -86,29 +84,29 @@ async function toggleCameraMode() {
     }
 }
 
-// update dropdown list  
-var videoDevices = [];
-async function updateCameraSelect() {
-    const devices = await navigator.mediaDevices.enumerateDevices(); // get all input devices
-    videoDevices = devices.filter(device => device.kind === 'videoinput'); // choose video devices
-    const cameraSelect = document.getElementById('camera-select');
-    cameraSelect.innerHTML = videoDevices.map((device, index) => `<option value="${index}">${device.label || `Camera ${index + 1}`}</option>`).join(''); // add to select
-}
+// // update dropdown list  
+// var videoDevices = [];
+// async function updateCameraSelect() {
+//     const devices = await navigator.mediaDevices.enumerateDevices(); // get all input devices
+//     videoDevices = devices.filter(device => device.kind === 'videoinput'); // choose video devices
+//     const cameraSelect = document.getElementById('camera-select');
+//     cameraSelect.innerHTML = videoDevices.map((device, index) => `<option value="${index}">${device.label || `Camera ${index + 1}`}</option>`).join(''); // add to select
+// }
 
-// get current cameraID
-async function switchCamera() {
-    const cameraSelect = document.getElementById('camera-select');
-    currentDeviceId = videoDevices[cameraSelect.value].deviceId;
-}
+// // get current cameraID
+// async function switchCamera() {
+//     const cameraSelect = document.getElementById('camera-select');
+//     currentDeviceId = videoDevices[cameraSelect.value].deviceId;
+// }
 
-// Switch camera when the select value changes
-document.getElementById('camera-select').addEventListener('change', async () => {
-    if (isCameraActive) {
-        await switchCamera();
-        // Stop the current webcam stream
-        webcam.stop();
-        mobilenet_state.textContent = currentDeviceId;
-        // Start a new webcam stream with the new camera
-        webcam = await tf.data.webcam(webcamElement, { video: { deviceId: currentDeviceId } });
-    }
-});
+// // Switch camera when the select value changes
+// document.getElementById('camera-select').addEventListener('change', async () => {
+//     if (isCameraActive) {
+//         await switchCamera();
+//         // Stop the current webcam stream
+//         webcam.stop();
+//         mobilenet_state.textContent = currentDeviceId;
+//         // Start a new webcam stream with the new camera
+//         webcam = await tf.data.webcam(webcamElement, { video: { deviceId: currentDeviceId } });
+//     }
+// });
