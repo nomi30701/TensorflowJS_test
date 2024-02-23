@@ -43,7 +43,7 @@ async function app() {
         await current_cameraId();
         const webcamElement = document.getElementById('webcam');
         const webcam = await tf.data.webcam(webcamElement, { video: { deviceId: currentDeviceId } });
-        
+        console.log(webcam);
         while (isCameraActive) {
             const img = await webcam.capture();
             const result = await net.classify(img);
