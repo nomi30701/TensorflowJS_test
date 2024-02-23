@@ -19,54 +19,6 @@ async function load_mobilenet() {
 
 
 // Predict btn
-// async function app() {
-//     show_result.innerHTML = ''; // clean text
-
-//     if (isCameraActive) {
-//         const webcam = await tf.data.webcam(webcamElement);
-//         while (true) {
-//             const img = await webcam.capture();
-//             const result = await net.classify(img);
-            
-//             let htmlContent = '';
-//             result.forEach((obj, _) => {
-//                 const className = obj.className;
-//                 const probability = (obj.probability * 100).toFixed(2);
-//                 const firstClassName = className.split(',')[0].trim();
-//                 htmlContent += `
-//                 <p>Class: <span style="color: blue">${firstClassName}</span> | Prob: <span style="color: red">${probability}%</span></p>
-//                 `;
-//             });
-//             show_result.innerHTML = htmlContent;
-
-//             img.dispose(); //  釋放圖像內存
-//             await tf.nextFrame(); // 等待下一個 frame
-//         }
-//     }
-//     else{
-//         // Make a prediction through the model on our image.
-//         const imgEl = document.getElementById('img');
-//         const result = await net.classify(imgEl);
-
-//         // show to page
-//         let htmlContent = '';
-//         result.forEach((obj, _) => {
-//             const className = obj.className;
-//             const probability = (obj.probability * 100).toFixed(2);
-//             const firstClassName = className.split(',')[0].trim();
-//             htmlContent += `
-//             <p>Class: <span style="color: blue">${firstClassName}</span> | Prob: <span style="color: red">${probability}%</span></p>
-//             `;
-//         });
-//         show_result.innerHTML = htmlContent;
-    
-//         show_result.classList.add('Info_container');
-//         classifier.appendChild(show_result);
-//     }
-// }
-
-
-
 async function app() {
     show_result.innerHTML = ''; // clean text
     show_result.classList.add('Info_container');
@@ -94,8 +46,8 @@ async function app() {
                 deviceId: currentDeviceId
             }
         };
-        const webcam = await tf.data.webcam(webcamElement, webcamConstraints);
         const webcamElement = document.getElementById('webcam');
+        const webcam = await tf.data.webcam(webcamElement, webcamConstraints);
         
         while (isCameraActive) {
             const img = await webcam.capture();
@@ -146,3 +98,13 @@ async function switchCamera() {
     currentDeviceId = videoDevices[cameraSelect.value].deviceId;
 }
 
+// Switch camera when the select value changes
+document.getElementById('camera-select').addEventListener('change', async () => {
+    if (isCameraActive) {
+        await switchCamera();
+        // Stop the current webcam stream
+        webcam.stop();
+        // Start a new webcam stream with the new camera
+        webcam = await tf.data.webcam(webcamElement, { video: { deviceId: currentDeviceId } });
+    }
+});
