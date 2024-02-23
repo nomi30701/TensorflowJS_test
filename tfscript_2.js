@@ -39,15 +39,14 @@ async function app() {
     }
 
     if (isCameraActive) {
-        await updateCameraSelect();
+        // const webcamConstraints = {
+        //     video: {
+        //         deviceId: currentDeviceId
+        //     }
+        // };
         await switchCamera();
-        const webcamConstraints = {
-            video: {
-                deviceId: currentDeviceId
-            }
-        };
         const webcamElement = document.getElementById('webcam');
-        const webcam = await tf.data.webcam(webcamElement, webcamConstraints);
+        const webcam = await tf.data.webcam(webcamElement, { video: { deviceId: currentDeviceId } });
         
         while (isCameraActive) {
             const img = await webcam.capture();
@@ -67,7 +66,7 @@ async function app() {
 
 // media toggle
 var isCameraActive = false;
-function toggleCameraMode() {
+async function toggleCameraMode() {
     if (isCameraActive) {
         // If the camera is active, switch back to file input and image
         document.getElementById('media-container').innerHTML = `
@@ -77,20 +76,22 @@ function toggleCameraMode() {
         isCameraActive = false;
     } else {
         document.getElementById('media-container').innerHTML = `
-            <video autoplay playsinline muted id="webcam" width="224" height="224"></video>
+            <video playsinline muted id="webcam" width="224" height="224"></video>
             <select id="camera-select"></select>
         `;
+        await updateCameraSelect();
+        await switchCamera();
         isCameraActive = true;
     }
 }
 
-// camera select
+// update dropdown list  
 var videoDevices = [];
 async function updateCameraSelect() {
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    videoDevices = devices.filter(device => device.kind === 'videoinput');
+    const devices = await navigator.mediaDevices.enumerateDevices(); // get all input devices
+    videoDevices = devices.filter(device => device.kind === 'videoinput'); // choose video devices
     const cameraSelect = document.getElementById('camera-select');
-    cameraSelect.innerHTML = videoDevices.map((device, index) => `<option value="${index}">${device.label || `Camera ${index + 1}`}</option>`).join('');
+    cameraSelect.innerHTML = videoDevices.map((device, index) => `<option value="${index}">${device.label || `Camera ${index + 1}`}</option>`).join(''); // add to select
 }
 
 async function switchCamera() {
