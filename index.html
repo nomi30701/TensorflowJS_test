@@ -43,9 +43,12 @@
                 <button id="classifier_btn" onclick="app()" disabled="false">Predict</button>
                 <div id="media-container">
                     <img id="img" src="./JlUvsxa.jpg" width="227" height="227">
-                    <input type="file" id="file" capture="camera" accept="image/jpeg, image/png">
+                    <button id="upload_btn">
+                        upload
+                        <input type="file" id="file" accept="image/jpeg, image/png">
+                    </button>
                 </div>
-                <button onclick="toggleCameraMode()">Toggle camera</button>
+                <button onclick="toggleCameraMode()">Toggle realtime</button>
                 <p id="mobilenet_state">State: not load</p>
             </div>
         </div>

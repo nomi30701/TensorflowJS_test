@@ -31,7 +31,7 @@ async function app() {
             const probability = (obj.probability * 100).toFixed(2);
             const firstClassName = className.split(',')[0].trim();
             htmlContent += `
-            <p>Class: <span style="color: blue">${firstClassName}</span>\n
+            <p>Class: <span style="color: blue">${firstClassName}</span><br>
             Prob: <span style="color: red">${probability}%</span></p>
             `;
         });
@@ -73,7 +73,10 @@ async function toggleCameraMode() {
         // If the camera is active, switch back to file input and image
         document.getElementById('media-container').innerHTML = `
             <img id="img" src="./JlUvsxa.jpg" width="227" height="227">
-            <input type="file" id="file" capture="camera" accept="image/jpeg, image/png">
+            <button id="upload_btn">
+                upload
+                <input type="file" id="file" accept="image/jpeg, image/png">
+            </button>
         `;
         isCameraActive = false;
 
