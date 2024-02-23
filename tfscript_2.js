@@ -42,8 +42,8 @@ async function app() {
     if (isCameraActive) {
         await current_cameraId();
         const webcamElement = document.getElementById('webcam');
-        const webcam = await tf.data.webcam(webcamElement, { video: { deviceId: currentDeviceId } });
-        console.log(webcam);
+        const webcam = await tf.data.webcam(webcamElement, {deviceId: currentDeviceId});
+        mobilenet_state.textContent = currentDeviceId;
         while (isCameraActive) {
             const img = await webcam.capture();
             const result = await net.classify(img);
