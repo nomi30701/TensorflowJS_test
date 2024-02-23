@@ -87,14 +87,15 @@ async function app() {
     }
 
     if (isCameraActive) {
+        await updateCameraSelect();
         await switchCamera();
         const webcamConstraints = {
             video: {
                 deviceId: currentDeviceId
             }
         };
-        const webcamElement = document.getElementById('webcam');
         const webcam = await tf.data.webcam(webcamElement, webcamConstraints);
+        const webcamElement = document.getElementById('webcam');
         
         while (isCameraActive) {
             const img = await webcam.capture();
@@ -110,7 +111,6 @@ async function app() {
         const result = await net.classify(imgEl);
         show_result.innerHTML = generateHtmlContent(result);
     }
-    
 }
 
 // media toggle
@@ -119,14 +119,31 @@ function toggleCameraMode() {
     if (isCameraActive) {
         // If the camera is active, switch back to file input and image
         document.getElementById('media-container').innerHTML = `
-            <input type="file" id="file" accept="image/jpeg, image/png"><br>
             <img id="img" src="./JlUvsxa.jpg" width="227" height="227">
+            <input type="file" id="file" accept="image/jpeg, image/png">
         `;
         isCameraActive = false;
     } else {
-        document.getElementById('media-container').innerHTML = '<video autoplay playsinline muted id="webcam" width="224" height="224"></video>';
+        document.getElementById('media-container').innerHTML = `
+            <video autoplay playsinline muted id="webcam" width="224" height="224"></video>
+            <select id="camera-select"></select>
+        `;
         isCameraActive = true;
     }
+}
+
+// camera select
+var videoDevices = [];
+async function updateCameraSelect() {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    videoDevices = devices.filter(device => device.kind === 'videoinput');
+    const cameraSelect = document.getElementById('camera-select');
+    cameraSelect.innerHTML = videoDevices.map((device, index) => `<option value="${index}">${device.label || `Camera ${index + 1}`}</option>`).join('');
+}
+
+async function switchCamera() {
+    const cameraSelect = document.getElementById('camera-select');
+    currentDeviceId = videoDevices[cameraSelect.value].deviceId;
 }
 
 // camera switch
@@ -143,24 +160,12 @@ async function switchCamera() {
         // Otherwise, switch to the next device
         currentDeviceId = videoDevices[currentDeviceIndex + 1].deviceId;
     }
-}
 
-// if import img file
-document.getElementById('file').addEventListener('change', function(event) {
-    const file = event.target.files[0]; // get file
-    const img = document.getElementById('img'); // get <img>
-    
-    // check file was load
-    if (file) {
-        // "FileReader" for read file
-        const reader = new FileReader();
-        
-        // if load
-        reader.onload = function(e) {
-            // load to <img>
-            img.src = e.target.result;
+    const webcamElement = document.getElementById('webcam');
+    const webcamConstraints = {
+        video: {
+            deviceId: currentDeviceId
         }
-        
-        reader.readAsDataURL(file); // 讀取文件並轉換為 DataURL
-    }
-});
+    };
+    webcam = await tf.data.webcam(webcamElement, webcamConstraints);
+}
