@@ -69,14 +69,21 @@ async function app() {
 // media toggle
 var isCameraActive = false;
 async function toggleCameraMode() {
+    const mediaContainer = document.getElementById('media-container');
     if (isCameraActive) {
         // If the camera is active, switch back to file input and image
-        document.getElementById('media-container').innerHTML = `
+        mediaContainer.innerHTML = `
             <img id="img" src="./JlUvsxa.jpg" width="227" height="227">
-            <button id="upload_btn">
-                upload
-                <input type="file" id="file" accept="image/jpeg, image/png">
-            </button>
+            <div>
+                <button class="media_btn" id="upload_btn">
+                    upload file
+                    <input type="file" id="file" accept="image/jpeg, image/png">
+                </button>
+                <button id="upload_btn">
+                    camera
+                    <input type="file" id="file" capture="camera">
+                </button>
+            </div>
         `;
         isCameraActive = false;
 
@@ -87,7 +94,7 @@ async function toggleCameraMode() {
             document.getElementById('img').src = url;
         });
     } else {
-        document.getElementById('media-container').innerHTML = `
+        mediaContainer.innerHTML = `
             <video autoplay playsinline muted id="webcam"></video>
             <select id="camera-select"></select>
         `;
