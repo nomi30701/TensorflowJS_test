@@ -146,26 +146,3 @@ async function switchCamera() {
     currentDeviceId = videoDevices[cameraSelect.value].deviceId;
 }
 
-// camera switch
-var currentDeviceId = '';
-async function switchCamera() {
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    const videoDevices = devices.filter(device => device.kind === 'videoinput');
-    const currentDeviceIndex = videoDevices.findIndex(device => device.deviceId === currentDeviceId);
-
-    if (currentDeviceIndex < 0 || currentDeviceIndex >= videoDevices.length - 1) {
-        // If the current device is not found or it's the last device, switch to the first device
-        currentDeviceId = videoDevices[0].deviceId;
-    } else {
-        // Otherwise, switch to the next device
-        currentDeviceId = videoDevices[currentDeviceIndex + 1].deviceId;
-    }
-
-    const webcamElement = document.getElementById('webcam');
-    const webcamConstraints = {
-        video: {
-            deviceId: currentDeviceId
-        }
-    };
-    webcam = await tf.data.webcam(webcamElement, webcamConstraints);
-}
