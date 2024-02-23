@@ -65,9 +65,14 @@ async function load_mobilenet() {
 //     }
 // }
 
+
+
 async function app() {
     show_result.innerHTML = ''; // clean text
+    show_result.classList.add('Info_container');
+    classifier.appendChild(show_result);
 
+    // Generate HTML content
     const generateHtmlContent = (result) => {
         let htmlContent = '';
         result.forEach((obj) => {
@@ -82,8 +87,15 @@ async function app() {
     }
 
     if (isCameraActive) {
+        await switchCamera();
+        const webcamConstraints = {
+            video: {
+                deviceId: currentDeviceId
+            }
+        };
         const webcamElement = document.getElementById('webcam');
-        const webcam = await tf.data.webcam(webcamElement);
+        const webcam = await tf.data.webcam(webcamElement, webcamConstraints);
+        
         while (isCameraActive) {
             const img = await webcam.capture();
             const result = await net.classify(img);
@@ -97,9 +109,8 @@ async function app() {
         const imgEl = document.getElementById('img');
         const result = await net.classify(imgEl);
         show_result.innerHTML = generateHtmlContent(result);
-        show_result.classList.add('Info_container');
-        classifier.appendChild(show_result);
     }
+    
 }
 
 // media toggle
@@ -115,6 +126,22 @@ function toggleCameraMode() {
     } else {
         document.getElementById('media-container').innerHTML = '<video autoplay playsinline muted id="webcam" width="224" height="224"></video>';
         isCameraActive = true;
+    }
+}
+
+// camera switch
+var currentDeviceId = '';
+async function switchCamera() {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const videoDevices = devices.filter(device => device.kind === 'videoinput');
+    const currentDeviceIndex = videoDevices.findIndex(device => device.deviceId === currentDeviceId);
+
+    if (currentDeviceIndex < 0 || currentDeviceIndex >= videoDevices.length - 1) {
+        // If the current device is not found or it's the last device, switch to the first device
+        currentDeviceId = videoDevices[0].deviceId;
+    } else {
+        // Otherwise, switch to the next device
+        currentDeviceId = videoDevices[currentDeviceIndex + 1].deviceId;
     }
 }
 
