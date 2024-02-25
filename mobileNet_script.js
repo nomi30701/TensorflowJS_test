@@ -60,7 +60,6 @@ async function app() {
                 const activation = net.infer(img, 'conv_preds');
                 // Get the most likely class and confidence from the classifier module.
                 const result = await classifier.predictClass(activation);
-                const classes = ['A', 'B', 'C'];
                 show_result.innerHTML = `
                 <p>Class: <span style="color: blue">${result.label}</span><br>
                 Confidence: <span style="color: red">${(result.confidences[result.label] * 100).toFixed(2)}%</span></p>
