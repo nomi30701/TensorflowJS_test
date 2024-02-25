@@ -9,14 +9,17 @@
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
         <!-- Import tfjs-vis -->
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
-        <!-- import mobilenet from tf -->
+        <!-- Import knn classifier -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier"></script>
+        <!-- import mobilenet -->
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
-        <!-- Import the data file -->
+        <!-- Import the data file (mnist dataset) -->
         <script src="data.js" type="module" defer></script>
         <!-- Import the main script file -->
-        <script src="tfscript.js" type="module" defer></script>
-        <script src="tfscript_2.js" defer></script>
+        <script src="mnist_script.js" type="module" defer></script>
+        <script src="mobileNet_script.js" defer></script>
         <script src="index.js" defer></script>
+
         <link rel="stylesheet" href="style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,8 +28,8 @@
     <body>
         <div class="container">
             <h3>Test tensorflow is available</h3>
-            <button onclick="tensorflow_random_btn()">Predict</button>
-            <p id="tensorflow_test">predict: </p>
+            <button class="main_btn" onclick="tensorflow_random_btn()">Predict</button>
+            <p class="states" id="tensorflow_test">predict: </p>
         </div>
         <hr>
         
@@ -34,34 +37,71 @@
         <!-- TODO: add hand write board -->
         <div class="container">
             <h3>Train MNIST dataset</h3>
-            <button id="train_MNIST_btn">Train model</button>
-            <button id="show_panel_btn">Show/hide panel</button>
-            <p id="model_state">State: none</p>
+            <button class="main_btn" id="train_MNIST_btn">Train model</button>
+            <button class="main_btn" id="show_panel_btn">Show/hide panel</button>
+            <p class="states" id="model_state">State: none</p>
         </div>
         <hr>
         
-        <div class="container" id="classifier">
-            <div class="container">
+        <div class="container">
+            <div class="container" id="main-function-container">
                 <h3>Mobilenet image classifier</h3>
-                <button onclick="load_mobilenet()">Load model</button>
-                <button id="classifier_btn" onclick="app()" disabled="false">Predict</button>
+                <button class="main_btn" onclick="load_mobilenet()">Load model</button>
+                <button class="main_btn" id="predict_btn" onclick="app()" disabled="false">Predict</button>
                 <div id="media-container">
                     <img id="img" src="./JlUvsxa.jpg" width="227" height="227">
                     <div>
-                        <button class="media_btn" id="upload_btn">
+                        <button class="media_btn" id="upload_btn_1">
                             upload file
-                            <input type="file" id="file" accept="image/jpeg, image/png">
+                            <input type="file" class="file_input" accept="image/jpeg, image/png">
                         </button>
-                        <button id="upload_btn">
+                        <button class="media_btn" id="upload_btn_2">
                             camera
-                            <input type="file" id="file" capture="camera">
+                            <input type="file" class="file_input" capture="camera">
                         </button>
                     </div>
                 </div>
-                <button onclick="toggleCameraMode()">Toggle realtime</button>
-                <p id="mobilenet_state">State: not load</p>
+                <button class="main_btn" onclick="toggleCameraMode()">Toggle realtime</button>
+                <p class="states" id="mobilenet_state">State: not load</p>
             </div>
+            <div id="custom-classifier-container">
+                <p>Custom classifier: <input type="checkbox" id="custom-classifier-checkbox"></p>
+                <div id="custom-classifier-input-container">
+                    <div>
+                        <p id="countA">Image count: 0</p>
+                        <label for="classA-name-input">ClassName:</label><br>
+                        <input type="text" id="classA-name-input" value="ClassA"><br>
+                        <button class="media_btn" id="upload_classA_btn">
+                            upload class A file
+                            <input type="file" class="file_input" accept="image/jpeg, image/png" multiple>
+                        </button>
+                    </div>
+                    <div>
+                        <p id="countB">Image count: 0</p>
+                        <label for="classB-name-input">ClassName:</label><br>
+                        <input type="text" id="classB-name-input" value="ClassB"><br>
+                        <button class="media_btn" id="upload_classB_btn">
+                            upload class B file
+                            <input type="file" class="file_input" accept="image/jpeg, image/png" multiple>
+                        </button>
+                    </div>
+                    <div>
+                        <p id="countC">Image count: 0</p>
+                        <label for="classC-name-input">ClassName:</label><br>
+                        <input type="text" id="classC-name-input" value="ClassC"><br>
+                        <button class="media_btn" id="upload_classC_btn">
+                            upload class C file
+                            <input type="file" class="file_input" accept="image/jpeg, image/png" multiple>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
         </div>
+
+
+
+        <!-- TODO: add custom class -->
 
         <!-- TODO: 增加 導入 python 模型 -->
         
