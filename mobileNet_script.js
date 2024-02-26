@@ -57,12 +57,13 @@ async function app() {
                 const img = tf.browser.fromPixels(webcamElement); // get the image from the webcam
     
                 // Get the activation from mobilenet from the webcam.
+                // mobilenet 作為特徵提取器
                 const activation = net.infer(img, 'conv_preds');
                 // Get the most likely class and confidence from the classifier module.
                 const result = await classifier.predictClass(activation);
                 show_result.innerHTML = `
-                <p>Class: <span style="color: blue">${result.label}</span><br>
-                Confidence: <span style="color: red">${(result.confidences[result.label] * 100).toFixed(2)}%</span></p>
+                    <p>Class: <span style="color: blue">${result.label}</span><br>
+                    Confidence: <span style="color: red">${(result.confidences[result.label] * 100).toFixed(2)}%</span></p>
                 `;
 
                 img.dispose();
@@ -83,14 +84,14 @@ async function app() {
     else {
         if (checkbox.checked) {
             const imgEl = document.getElementById('img');
+            // mobilenet 作為特徵提取器
             const activation = net.infer(imgEl, 'conv_preds');
             const result = await classifier.predictClass(activation);
             show_result.innerHTML = `
-                <p>Class: <span style="color: blue">${result.label}</span><br>
+                <p>Class: <span style="color: blue">${classNames[result.label]}</span><br>
                 Confidence: <span style="color: red">${(result.confidences[result.label] * 100).toFixed(2)}%</span></p>
             `;
-        }
-        else {
+        }else {
             const imgEl = document.getElementById('img');
             const result = await net.classify(imgEl);
             show_result.innerHTML = generateHtmlContent(result);
@@ -157,7 +158,41 @@ function attachFileInputEventListeners() {
 }
 attachFileInputEventListeners();
 
-// if custom classifier is on
+
+// when load btn is clicked, load the images to knn
+let classNames;
+async function handleFileUpload() {
+    if (!model_loaded){
+        mobilenet_state.textContent = 'Please Load model first!';
+        mobilenet_state.style.color = 'red';
+        return;
+    }
+    
+    classNames = [
+        document.getElementById('classA-name-input').value, 
+        document.getElementById('classB-name-input').value, 
+        document.getElementById('classC-name-input').value
+    ];
+
+    mobilenet_state.textContent = 'Loading images to KNN..';
+    mobilenet_state.style.color = 'red';
+
+    for (let i = 0; i < imagesArray.length; i++) {
+        if (imagesArray[i].length === 0) continue;
+        
+        for (let j = 0; j < imagesArray[i].length; j++) {
+            const img = document.createElement('img'); 
+            img.src = URL.createObjectURL(imagesArray[i][j]);
+            img.onload = () =>{
+                addExample(i, img);
+            }
+        }
+    }
+
+    mobilenet_state.textContent = 'Loading images to KNN Done!';
+    mobilenet_state.style.color = 'green';
+}
+
 const addExample = async (classId, img) => {
     // Get the intermediate activation of MobileNet 'conv_preds' and pass that
     // to the KNN classifier.
@@ -168,27 +203,25 @@ const addExample = async (classId, img) => {
 };
 
 
-// When files are selected, read each file and load it into an img element
-function handleFileUpload(event, classId, countElementId) {
-    if (model_loaded){
-        const files = event.target.files;
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(file);
-            img.onload = () => {
-                addExample(classId, img);
-                const countElement = document.getElementById(countElementId);
-                const currentCount = parseInt(countElement.textContent.split(': ')[1]);
-                countElement.textContent = `Image count: ${currentCount + 1}`;
-            };
-        }
-    }else{
-        mobilenet_state.textContent = 'Please Load model first!';
-        mobilenet_state.style.color = 'red';
-    }
+// save images to array
+let imagesArray = [[], [], []];
+const ids = ['upload_classA_btn', 'upload_classB_btn', 'upload_classC_btn'];
+const counts_label_id = ['countA', 'countB', 'countC'];
+
+ids.forEach((id, index) => {
+    document.getElementById(id).addEventListener('change', (event) => {
+        imagesArray[index].push(...event.target.files);
+        document.getElementById(counts_label_id[index]).textContent = `Image count: ${imagesArray[index].length}` ;
+        console.log(imagesArray);
+    });
+});
+
+// reset images btn
+function resetImages() {
+    imagesArray = [[], [], []];
+    classifier = knnClassifier.create(); // reset classifier
+    counts_label_id.forEach((id) => {
+        document.getElementById(id).textContent = `Image count: 0`;
+    });
 }
-// Btn event listener (can use 0, 1, 2 label and when predict, mapping to class name)
-document.getElementById('upload_classA_btn').addEventListener('change', (event) => handleFileUpload(event, document.getElementById('classA-name-input').value, 'countA'));
-document.getElementById('upload_classB_btn').addEventListener('change', (event) => handleFileUpload(event, document.getElementById('classB-name-input').value, 'countB'));
-document.getElementById('upload_classC_btn').addEventListener('change', (event) => handleFileUpload(event, document.getElementById('classC-name-input').value, 'countC'));
+

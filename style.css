@@ -57,7 +57,7 @@ hr {
     margin-bottom: 10px;
     font-size: 15px;
     border-radius: 10px;
-    padding: 3px 30px;
+    padding: 3px 20px;
     margin-top: 10px;
 }
 
@@ -100,5 +100,19 @@ hr {
     margin-top: 0;
     margin-bottom: 10px;
 }
-
-
+#custom-classifier-input-container {
+    display: flex;
+    flex-direction: row;
+}
+#custom-classifier-input-container input {
+    width: 100%;
+    max-width: 140px;
+}
+#custom-classifier-load-btn, #custom-classifier-reset-btn{
+    font-size: 20px;
+    margin-bottom: 0;
+}
+#custom-classifier-load-container{
+    display: flex;
+    justify-content: space-between;
+}

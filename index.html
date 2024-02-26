@@ -64,8 +64,15 @@
                 <button class="main_btn" onclick="toggleCameraMode()">Toggle realtime</button>
                 <p class="states" id="mobilenet_state">State: not load</p>
             </div>
+
             <div id="custom-classifier-container">
-                <p>Custom classifier: <input type="checkbox" id="custom-classifier-checkbox"></p>
+                <div id="custom-classifier-load-container">
+                    <p>Custom classifier: <input type="checkbox" id="custom-classifier-checkbox"></p>
+                    <div>
+                        <button class="main_btn" id="custom-classifier-reset-btn" onclick="resetImages()">reset</button>
+                        <button class="main_btn" id="custom-classifier-load-btn" onclick="handleFileUpload()">Load</button>
+                    </div>
+                </div>
                 <div id="custom-classifier-input-container">
                     <div>
                         <p id="countA">Image count: 0</p>
@@ -98,10 +105,6 @@
             </div>
             
         </div>
-
-
-
-        <!-- TODO: add custom class -->
 
         <!-- TODO: 增加 導入 python 模型 -->
         
