@@ -14,13 +14,14 @@
         <!-- import mobilenet -->
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
         <!-- Import the data file (mnist dataset) -->
-        <script src="data.js" type="module" defer></script>
+        <script src="./src/scripts/data.js" type="module" defer></script>
         <!-- Import the main script file -->
-        <script src="mnist_script.js" type="module" defer></script>
-        <script src="mobileNet_script.js" defer></script>
-        <script src="index.js" defer></script>
+        <script src="./src/scripts/mnist_script.js" type="module" defer></script>
+        <script src="./src/scripts/mobileNet_script.js" defer></script>
+        <script src="./src/scripts/test_script.js" defer></script>
+        <script src="./src/scripts/yolov8.js" defer></script>
 
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="./src/style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
@@ -49,7 +50,7 @@
                 <button class="main_btn" onclick="load_mobilenet()">Load model</button>
                 <button class="main_btn" id="predict_btn" onclick="app()" disabled="false">Predict</button>
                 <div id="media-container">
-                    <img id="img" src="./JlUvsxa.jpg" width="227" height="227">
+                    <img id="img" src="./src/JlUvsxa.jpg" width="227" height="227">
                     <div>
                         <button class="media_btn" id="upload_btn_1">
                             upload file
@@ -103,10 +104,10 @@
                     </div>
                 </div>
             </div>
-            
         </div>
 
-        <!-- TODO: 增加 導入 python 模型 -->
-        
+        <!-- TODO: 增加 yolov9 模型應用 -->
+        <!-- TODO: 增加 訓練模型功能 -->
+
 </body>
 </html>
