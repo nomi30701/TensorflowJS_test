@@ -41,7 +41,7 @@ async function app() {
     }
 
     // predict camera, image
-    if (isCameraActive) {
+    if (isCameraActive) { // realtime
         await current_cameraId(); // get current cameraID
         const webcamElement = document.getElementById('webcam');
 
@@ -81,8 +81,8 @@ async function app() {
             webcam.stop(); // Stop the webcam when not in use
         }
     }
-    else {
-        if (checkbox.checked) {
+    else { // img
+        if (checkbox.checked) { 
             const imgEl = document.getElementById('img');
             // mobilenet 作為特徵提取器
             const activation = net.infer(imgEl, 'conv_preds');
@@ -104,7 +104,7 @@ var isCameraActive = false;
 async function toggleCameraMode() {
     if (isCameraActive) {
         mediaContainer.innerHTML = `
-            <img id="img" src="./JlUvsxa.jpg" width="227" height="227">
+            <img id="img" src="./src/JlUvsxa.jpg" width="227" height="227">
             <div>
                 <button class="media_btn" id="upload_btn_1">
                     upload file

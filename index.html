@@ -9,6 +9,8 @@
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
         <!-- Import tfjs-vis -->
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
+        <!-- Load the coco-ssd model. -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
         <!-- Import knn classifier -->
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier"></script>
         <!-- import mobilenet -->
@@ -19,7 +21,7 @@
         <script src="./src/scripts/mnist_script.js" type="module" defer></script>
         <script src="./src/scripts/mobileNet_script.js" defer></script>
         <script src="./src/scripts/test_script.js" defer></script>
-        <script src="./src/scripts/yolov8.js" defer></script>
+        <script src="./src/scripts/objdetect_script.js" defer></script>
 
         <link rel="stylesheet" href="./src/style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,16 +46,19 @@
         </div>
         <hr>
         
+        <!-- Image classifier app -->
         <div class="container">
             <div class="container" id="main-function-container">
-                <h3>Mobilenet image classifier</h3>
+                <h3>Image classifier</h3>
+                <p>model: <span style="background-color: black; color: lightgreen; border-radius: 10px;">MobileNet</span></p>
+
                 <button class="main_btn" onclick="load_mobilenet()">Load model</button>
                 <button class="main_btn" id="predict_btn" onclick="app()" disabled="false">Predict</button>
                 <div id="media-container">
                     <img id="img" src="./src/JlUvsxa.jpg" width="227" height="227">
                     <div>
                         <button class="media_btn" id="upload_btn_1">
-                            upload file
+                            Open Image
                             <input type="file" class="file_input" accept="image/jpeg, image/png">
                         </button>
                         <button class="media_btn" id="upload_btn_2">
@@ -105,9 +110,31 @@
                 </div>
             </div>
         </div>
+        <hr>
+        <!-- TODO: 增加 mobilenet訓練模型功能 -->
 
-        <!-- TODO: 增加 yolov9 模型應用 -->
-        <!-- TODO: 增加 訓練模型功能 -->
-
+        <!-- Object detect app -->
+        <div class="container">
+            <h3>📷Object detection</h3>
+            <p>model: <span style="background-color: black; color: lightgreen; border-radius: 10px;">Coco-SSD</span></p>
+            <button class="main_btn" onclick="load_coco()">Load model</button>
+            <div id="media-container">
+                <canvas id="objdetect-canvas" style="border-radius: 8px;"></canvas>
+                <img id="imgel-objdetect" hidden>
+                <div>
+                    <button class="media_btn" id="">
+                        Open Image
+                        <input type="file" class="file_input" id="input-openImg-coco" accept="image/jpeg, image/png" disabled>
+                    </button>
+                    <button class="media_btn" id="">
+                        camera
+                        <input type="file" class="file_input" id="input-camera-coco" capture="camera" disabled>
+                    </button>
+                </div>
+            </div>
+            <button class="main_btn" onclick="">Toggle realtime</button>
+            <p class="states" id="coco-state">State: not load</p>
+        </div>
+        
 </body>
 </html>

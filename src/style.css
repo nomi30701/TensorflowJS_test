@@ -16,10 +16,13 @@ hr {
     flex-direction: column;
     align-items: center;
 }
+.container h3{
+    margin: 25px 0;
+}
 
 .main_btn {
     margin-bottom: 25px;
-    font-size: 35px;
+    font-size: 30px;
     border-radius: 50px;
     padding: 3px 30px;
     background-color: rgb(48, 48, 48);
