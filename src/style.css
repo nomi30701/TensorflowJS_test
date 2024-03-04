@@ -119,3 +119,8 @@ hr {
     display: flex;
     justify-content: space-between;
 }
+
+#objdetect-canvas {
+    max-width: 640px;
+    max-height: 640px;
+}
