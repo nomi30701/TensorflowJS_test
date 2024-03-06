@@ -98,7 +98,7 @@ function drawBoundingBox(predictions, src, width, height) {
             prediction.bbox[2],
             prediction.bbox[3]
         );
-        
+
         // Calculate text position
         let textX = prediction.bbox[0];
         let textY = prediction.bbox[1] > 10 ? prediction.bbox[1] - 5 : 10;
@@ -106,18 +106,17 @@ function drawBoundingBox(predictions, src, width, height) {
         // calculate text width
         const text = `${prediction.class} - ${Math.round(prediction.score * 100)}%`;
         const textWidth = ctx.measureText(text).width;
-        console.log(text, textX, textY);
 
         // Adjust line width and font size based on scale factor
         ctx.lineWidth = 1.5 * scaleFactor;
         ctx.strokeStyle = color;
         ctx.stroke();
         
+        // draw text and background
         ctx.fillStyle = color;
-        ctx.fillRect(textX, textY - 14 * scaleFactor, textWidth + 20 * scaleFactor, 20 * scaleFactor);
+        ctx.fillRect(textX, textY - 14 * scaleFactor, textWidth * scaleFactor, 20 * scaleFactor);
         ctx.fillStyle = 'white';
-        ctx.font = `${15 * scaleFactor}px`;
-        
+        ctx.font = `${15 * scaleFactor}px Arial`;
         ctx.fillText(text, textX, textY);
     });
 }
