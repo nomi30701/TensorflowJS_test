@@ -70,6 +70,7 @@ async function handleFileChange(event) {
     imgel.src = URL.createObjectURL(file);
     await imgel.decode();
     const predictions = await coco.detect(imgel);
+    console.log(predictions);
     drawBoundingBox(predictions, imgel, imgel.width, imgel.height);
 }
 upload_btn_coco.addEventListener('change', handleFileChange);
