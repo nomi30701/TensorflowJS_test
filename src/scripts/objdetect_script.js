@@ -70,7 +70,6 @@ async function handleFileChange(event) {
     imgel.src = URL.createObjectURL(file);
     await imgel.decode();
     const predictions = await coco.detect(imgel);
-    console.log(predictions);
     drawBoundingBox(predictions, imgel, imgel.width, imgel.height);
 }
 upload_btn_coco.addEventListener('change', handleFileChange);
@@ -84,40 +83,27 @@ function drawBoundingBox(predictions, src, width, height) {
 
     const ctx = obj_canvas.getContext('2d');
 
-    // Calculate scale factor based on image size
-    const scaleFactor = Math.sqrt(src.width * src.height) / 500;
-
     ctx.drawImage(src, 0, 0);
-    predictions.forEach(prediction => {
-        // Generate a random color for each bounding box
-        const color = `rgb(255, 0, 255)`;
-
+    predictions.forEach(predict => {
         ctx.beginPath();
         ctx.rect(
-            prediction.bbox[0],
-            prediction.bbox[1],
-            prediction.bbox[2],
-            prediction.bbox[3]
+            predict.bbox[0],
+            predict.bbox[1],
+            predict.bbox[2],
+            predict.bbox[3]
         );
-
-        // Calculate text position
-        let textX = prediction.bbox[0];
-        let textY = prediction.bbox[1] > 10 ? prediction.bbox[1] - 5 : 10;
-        
-        // calculate text width
-        const text = `${prediction.class} - ${Math.round(prediction.score * 100)}%`;
-        const textWidth = ctx.measureText(text).width;
-
-        // Adjust line width and font size based on scale factor
-        ctx.lineWidth = 1.5 * scaleFactor;
-        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = `rgb(255, 0, 255)`;
         ctx.stroke();
         
-        // draw text and background
-        ctx.fillStyle = color;
-        ctx.fillRect(textX, textY - 14 * scaleFactor, textWidth * scaleFactor, 20 * scaleFactor);
+        // Draw text and background
+        ctx.fillStyle = `rgb(255, 0, 255)`;
+        ctx.font = '16px Arial';
+        const text = `${predict.class} | ${Math.floor((predict.score * 100))}%`;
+        const textWidth = ctx.measureText(text).width;
+        const textHeight = parseInt(ctx.font, 10);
+        ctx.fillRect(predict.bbox[0] - 1, predict.bbox[1] - textHeight - 4, textWidth + 4, textHeight + 4);
         ctx.fillStyle = 'white';
-        ctx.font = `${15 * scaleFactor}px Arial`;
-        ctx.fillText(text, textX, textY);
+        ctx.fillText(text, predict.bbox[0], predict.bbox[1] - 5);
     });
 }
